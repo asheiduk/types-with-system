@@ -3,11 +3,11 @@
  */
 package de.mathema.typesystem.scoping
 
+import de.mathema.typesystem.types.TypeCalculator
+import de.mathema.typesystem.types.TypeExtensions
 import de.mathema.typesystem.typesystem.Entity
-import de.mathema.typesystem.typesystem.EntityTypeRef
 import de.mathema.typesystem.typesystem.LValueRefChain
-import de.mathema.typesystem.typesystem.TypeRef
-import de.mathema.typesystem.typesystem.VariableDefinitionRef
+import javax.inject.Inject
 import org.eclipse.emf.ecore.EReference
 import org.eclipse.emf.ecore.EStructuralFeature
 import org.eclipse.xtext.scoping.Scopes
@@ -24,29 +24,16 @@ import static de.mathema.typesystem.typesystem.TypesystemPackage.Literals.*
  */
 class TypesystemScopeProvider extends AbstractDeclarativeScopeProvider {
 	
+	@Inject extension TypeExtensions
+	@Inject extension TypeCalculator
+	
 	def scope_LValueRefChain_right(LValueRefChain it, EReference ref){
 		assertFeature(LVALUE_REF_CHAIN__RIGHT)
 		
-		val Entity entity = left?.typeRef?.resolveToEntity
+		val Entity entity = left?.type?.toEntity
 		if( entity != null ){
 			return Scopes.scopeFor(entity.attributes)
 		}
-	}
-	
-	def private dispatch TypeRef getTypeRef(LValueRefChain it){
-		right?.type
-	}
-	
-	def private dispatch TypeRef getTypeRef(VariableDefinitionRef it){
-		ref?.type
-	}
-	
-	/** Resolve a TypeRef to an Entity or null. */
-	def private Entity resolveToEntity(TypeRef it){
-		if( it instanceof EntityTypeRef )
-			return entityType
-		else 
-			return null
 	}
 	
 	def private void assertFeature(EStructuralFeature feature){

@@ -2,6 +2,7 @@ package de.mathema.typesystem
 
 import com.google.inject.Inject
 import de.mathema.typesystem.typesystem.Model
+import java.util.List
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.xtext.diagnostics.Severity
 import org.eclipse.xtext.junit4.util.ParseHelper
@@ -25,7 +26,7 @@ class TypesystemParseHelper {
 	def Model parseAndResolveOrFail(CharSequence text){
 		val model = parseOrFail(text)
 		
-		EcoreUtil::resolveAll(model)
+		EcoreUtil.resolveAll(model)
 		checkErrors(model)
 		
 		model
@@ -34,10 +35,14 @@ class TypesystemParseHelper {
 	def Model parseResolveAndValidateOrFail(CharSequence text){
 		val model = parseAndResolveOrFail(text)
 		
-		val issues = validator.validate(model.eResource, CheckMode::ALL, null)
+		val issues = validate(model)
 		checkErrors(issues)
 		
 		model
+	}
+	
+	def List<Issue> validate(Model model){
+		validator.validate(model.eResource, CheckMode.ALL, null)
 	}
 	
 	def checkErrors(Model it){
@@ -48,8 +53,8 @@ class TypesystemParseHelper {
 	}
 	
 	def checkErrors(Iterable<Issue> issues){
-		if( issues.exists[severity == Severity::ERROR] ) {
-			val errors = issues.filter[severity == Severity::ERROR]
+		if( issues.exists[severity == Severity.ERROR] ) {
+			val errors = issues.filter[severity == Severity.ERROR]
 			val message = errors.map[message].join('\n')
 			throw new ParseException(message)
 		}
