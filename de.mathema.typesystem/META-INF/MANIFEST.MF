@@ -1,0 +1,35 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: de.mathema.typesystem
+Bundle-Vendor: My Company
+Bundle-Version: 1.0.0.qualifier
+Bundle-SymbolicName: de.mathema.typesystem; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.xtext;visibility:=reexport,
+ org.eclipse.xtext.xbase;resolution:=optional;visibility:=reexport,
+ org.eclipse.xtext.generator;resolution:=optional,
+ org.apache.commons.logging;bundle-version="1.0.4";resolution:=optional,
+ org.eclipse.emf.codegen.ecore;resolution:=optional,
+ org.eclipse.emf.mwe.utils;resolution:=optional,
+ org.eclipse.emf.mwe2.launch;resolution:=optional,
+ org.eclipse.xtext.util,
+ org.eclipse.emf.ecore,
+ org.eclipse.emf.common,
+ org.antlr.runtime,
+ org.eclipse.xtext.common.types,
+ org.objectweb.asm;bundle-version="[5.0.1,6.0.0)";resolution:=optional
+Import-Package: org.apache.log4j,
+ org.eclipse.xtext.xbase.lib
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Export-Package: de.mathema.typesystem,
+ de.mathema.typesystem.services,
+ de.mathema.typesystem.typesystem,
+ de.mathema.typesystem.typesystem.impl,
+ de.mathema.typesystem.typesystem.util,
+ de.mathema.typesystem.serializer,
+ de.mathema.typesystem.parser.antlr,
+ de.mathema.typesystem.parser.antlr.internal,
+ de.mathema.typesystem.validation,
+ de.mathema.typesystem.scoping,
+ de.mathema.typesystem.generator,
+ de.mathema.typesystem.formatting

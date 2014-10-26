@@ -1,0 +1,122 @@
+grammar de.mathema.typesystem.Typesystem with org.eclipse.xtext.common.Terminals
+
+generate typesystem "http://www.mathema.de/typesystem/Typesystem"
+
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+
+Model:
+	{Model}
+	(
+		(entities += Entity)
+		| (statement += Statement)
+	)*
+;
+
+// ---------- Entity ------------------------------
+
+Entity:
+	'entity' name=ID '{'
+		attributes += Attribute*
+	'}'
+;
+
+Attribute:
+	type=TypeRef name=ID 
+;
+
+TypeRef:
+	PrimitiveTypeRef | EntityTypeRef
+;
+
+PrimitiveTypeRef:
+	primitiveType=PrimitiveType
+;
+
+EntityTypeRef:
+	entityType=[Entity]
+;
+
+enum PrimitiveType:
+	int | float | string | boolean | date | time | timestamp
+;
+
+// ---------- Statement ------------------------------
+
+Statement:
+	DeclareStatement | SetStatement | EvalStatement
+;
+
+DeclareStatement:
+	'declare' type=TypeRef name=ID 
+;
+
+SetStatement:
+	'set' var=LValueRef '=' expr=Expression
+;
+
+EvalStatement:
+	('eval' | 'evaluate') expr=Expression
+;
+
+// ---------- Expression ------------------------------
+
+Expression:
+	LogicalExpression
+;
+
+LogicalExpression returns Expression:
+	PlusMinus ( {BinaryExpression.left = current} op = ('and'|'or') right = PlusMinus )*
+;
+
+PlusMinus returns Expression:
+	MultDiv ( {BinaryExpression.left = current} op = ('+' | '-') right = MultDiv )*
+;
+
+MultDiv returns Expression:
+	PrimaryExpression ( {BinaryExpression.left = current} op =('*' | '/') right = PrimaryExpression )*
+;
+
+PrimaryExpression returns Expression:
+	'(' Expression ')'
+	| LValueRef
+	| Literal
+;
+
+
+LValueRef returns LValueRef:
+	VariableDefinitionRef ( {LValueRefChain.left = current} '.' right = [Attribute] )*
+;
+
+VariableDefinitionRef returns LValueRef:
+	{VariableDefinitionRef} ref = [DeclareStatement]
+;
+
+Literal returns Literal:
+	{IntLiteral} value=INT
+	|{FloatLiteral} value=Float
+	|{StringLiteral} value=STRING
+	|{BooleanLiteral} value=Boolean
+	|{TimeLiteral} value=Time
+	|{DateLiteral} value=Date
+	|{TimestampLiteral} value=Timestamp
+;
+
+Float returns ecore::EFloat:
+	INT '.' INT
+;
+
+Boolean returns ecore::EBoolean: 
+	'true' | 'false' 
+;
+
+Time:
+	INT ':' INT
+;
+
+Date:
+	INT '.' INT '.' INT
+;
+
+Timestamp:
+	Date Time
+;
