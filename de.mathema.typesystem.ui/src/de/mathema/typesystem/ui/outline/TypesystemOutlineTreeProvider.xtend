@@ -3,11 +3,37 @@
 */
 package de.mathema.typesystem.ui.outline
 
+import de.mathema.typesystem.typesystem.Attribute
+import de.mathema.typesystem.typesystem.DeclareStatement
+import de.mathema.typesystem.typesystem.Statement
+import org.eclipse.xtext.ui.editor.outline.impl.DefaultOutlineTreeProvider
+import de.mathema.typesystem.typesystem.SetStatement
+import de.mathema.typesystem.typesystem.EvalStatement
+
 /**
  * Customization of the default outline structure.
  *
  * see http://www.eclipse.org/Xtext/documentation.html#outline
  */
-class TypesystemOutlineTreeProvider extends org.eclipse.xtext.ui.editor.outline.impl.DefaultOutlineTreeProvider {
+class TypesystemOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	
+	def protected _text(DeclareStatement it){
+		'declare '+name
+	}
+	
+	def protected _text(SetStatement it){
+		'set'
+	}
+	
+	def protected _text(EvalStatement it){
+		'eval'
+	}
+	
+	def protected _isLeaf(Statement it){
+		true
+	}
+	
+	def protected _isLeaf(Attribute it){
+		true
+	}
 }
