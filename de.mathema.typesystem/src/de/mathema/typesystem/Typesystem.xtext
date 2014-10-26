@@ -65,15 +65,19 @@ Expression:
 ;
 
 LogicalExpression returns Expression:
-	PlusMinus ( {BinaryExpression.left = current} op = ('and'|'or') right = PlusMinus )*
+	CompareExpression ( {LogicalExpression.left = current} op = ('and'|'or') right = CompareExpression )*
+;
+
+CompareExpression returns Expression:
+	PlusMinus ( {CompareExpression.left = current} op = ('=='|'!='|'<'|'<='|'>'|'>=' ) right = PlusMinus )*
 ;
 
 PlusMinus returns Expression:
-	MultDiv ( {BinaryExpression.left = current} op = ('+' | '-') right = MultDiv )*
+	MultDiv ( ({PlusExpression.left = current} '+' | {MinusExpression.left = current} '-') right = MultDiv )*
 ;
 
 MultDiv returns Expression:
-	PrimaryExpression ( {BinaryExpression.left = current} op =('*' | '/') right = PrimaryExpression )*
+	PrimaryExpression ( ({MultiplyExpression.left = current} '*' | {DivideExpression.left = current} '/') right = PrimaryExpression )*
 ;
 
 PrimaryExpression returns Expression:
