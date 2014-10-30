@@ -51,7 +51,7 @@ DeclareStatement:
 ;
 
 SetStatement:
-	'set' var=LValueRef '=' expr=Expression
+	'set' var=LValueExpression '=' expr=Expression
 ;
 
 EvalStatement:
@@ -82,16 +82,16 @@ MultDiv returns Expression:
 
 PrimaryExpression returns Expression:
 	'(' Expression ')'
-	| LValueRef
+	| LValueExpression
 	| Literal
 ;
 
 
-LValueRef returns LValueRef:
+LValueExpression returns LValueExpression:
 	VariableDefinitionRef ( {LValueRefChain.left = current} '.' right = [Attribute] )*
 ;
 
-VariableDefinitionRef returns LValueRef:
+VariableDefinitionRef returns LValueExpression:
 	{VariableDefinitionRef} ref = [DeclareStatement]
 ;
 
