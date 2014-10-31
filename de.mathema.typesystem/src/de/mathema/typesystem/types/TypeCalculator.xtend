@@ -26,7 +26,7 @@ class TypeCalculator {
 	
 	@Inject extension TypeExtensions
 	
-	BinaryOperatorTable plusTable = new BinaryOperatorTable => [
+	val plusTable = new BinaryOperatorTable => [
 		// every primitive can be appended to a string - commutative as in Java
 		put(STRING_TYPE, STRING_TYPE, STRING_TYPE)
 		putCommutative(STRING_TYPE, INT_TYPE, STRING_TYPE)
@@ -45,7 +45,7 @@ class TypeCalculator {
 		putCommutative(DATE_TYPE, TIME_TYPE, TIMESTAMP_TYPE)
 	]
 	
-	BinaryOperatorTable minusMultDivTable = new BinaryOperatorTable => [
+	val minusMultDivTable = new BinaryOperatorTable => [
 		// numbers
 		put(INT_TYPE, INT_TYPE, INT_TYPE)
 		put(FLOAT_TYPE, FLOAT_TYPE, FLOAT_TYPE)
