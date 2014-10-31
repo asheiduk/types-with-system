@@ -86,4 +86,22 @@ class TypecheckTest {
 		checkFail('''«preamble» 42 == "42"''')
 	}
 	
+	@Test def void testMulti(){
+		val preamble = '''
+			declare int i
+			declare float f
+			set 
+		'''
+		checkOk('''«preamble» i = i * i''')
+		checkFail('''«preamble» i = i * f''')	// i*f->float which is not assignable to int
+		checkFail('''«preamble» i = f * i''')	// i*f->float which is not assignable to int
+		checkFail('''«preamble» i = f * f''')	// i*f->float which is not assignable to int
+		
+		checkOk('''«preamble» f = i * i''')
+		checkOk('''«preamble» f = i * f''')
+		checkOk('''«preamble» f = f * i''')
+		checkOk('''«preamble» f = f * f''')
+		
+	}
+	
 }
