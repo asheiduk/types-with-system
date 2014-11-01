@@ -28,6 +28,9 @@ import de.mathema.typesystem.typesystem.DivideExpression
  * see http://www.eclipse.org/Xtext/documentation.html#validation
  */
 class TypesystemValidator extends AbstractTypesystemValidator {
+	public static val NO_TYPE = 'NO_TYPE' 
+	public static val INCOMPATIBLE_OPERANDS = 'INCOMPATIBLE_OPERANDS'
+	public static val INCOMPATIBLE_TYPES = 'INCOMPATIBLE_TYPES'
 
 	@Inject extension TypeCalculator
 	@Inject extension TypeCompatibility
@@ -37,60 +40,60 @@ class TypesystemValidator extends AbstractTypesystemValidator {
 		val leftType = left?.type
 		val rightType = right?.type
 		
+		if( leftType == null || rightType == null ){
+			return
+		}
+		
 		if( !leftType.isAssignableTo(rightType) && !rightType.isAssignableTo(leftType) ){
-			val msg = '''Incompatible types: '«leftType.asString»' «op» '«rightType.asString»' '''
-			error(msg, null)
+			val msg = '''Incompatible types for operator '«op»': '«leftType.asString»' «op» '«rightType.asString»' '''
+			error(msg, null, INCOMPATIBLE_OPERANDS)
 		}
 	}
 	
-	@Check 
-	def void checkPlusExpression(PlusExpression it){
-		checkOverloadedOperatorExpression(left, '+', right)
-	}
-	
 	@Check
-	def void checkMinusExpression(MinusExpression it){
-		checkOverloadedOperatorExpression(left, '-', right)
-	}
-	
-	@Check
-	def void checkMultiplyExpression(MultiplyExpression it){
-		checkOverloadedOperatorExpression(left, '-', right)
-	}
-
-	@Check
-	def void checkDivideExpression(DivideExpression it){
-		checkOverloadedOperatorExpression(left, '-', right)
-	}
-	
-	def private checkOverloadedOperatorExpression(Expression it, Expression left, String op, Expression right){		
-		val actualType = type; 
-		if( actualType == null ){	// If there is no result type then something is wrong!
-			val leftType = left.type
-			val rightType = right.type
-			val msg = '''Incompatible types: '«leftType.asString»' «op» '«rightType.asString»' '''
-			error(msg, null)
-		}
-	}
-
-	@Check
-	def void checkExpectedType(Expression it){
+	def void checkType(Expression it){
 		val actualType = type
-		if( actualType == null ){
-			val msg = '''Cannot calculate type.'''
-			error(msg, null)
+		if( actualType == null ){ 	// If there is no result type then something is wrong!
+			handleNoType
 		}
 		else {
 			val expectedType = expectedType(eContainer, eContainingFeature)
 			if( expectedType != null ){
 				if( ! actualType.isAssignableTo(expectedType) ){
 					val msg = '''Incompatible types: expected '«expectedType.asString»' but is actually '«actualType.asString»' '''
-					error(msg, null)
+					error(msg, null, INCOMPATIBLE_TYPES)
 				}
 			}
 		}
 	}
 	
+	def private dispatch void handleNoType(Expression it){
+		error('Cannot calculate type.', null, NO_TYPE)
+	}
+	
+	def private dispatch void handleNoType(PlusExpression it){
+		handleNoTypeOverloadedOperator(left, '+', right)
+	}
+	
+	def private dispatch void handleNoType(MinusExpression it){
+		handleNoTypeOverloadedOperator(left, '-', right)
+	}
+	
+	def private dispatch void handleNoType(MultiplyExpression it){
+		handleNoTypeOverloadedOperator(left, '*', right)
+	}
+
+	def private dispatch void handleNoType(DivideExpression it){
+		handleNoTypeOverloadedOperator(left, '/', right)
+	}
+	
+	def private handleNoTypeOverloadedOperator(Expression it, Expression left, String op, Expression right){		
+		val leftType = left.type
+		val rightType = right.type
+		val msg = '''Incompatible types for operator '«op»': '«leftType.asString»' «op» '«rightType.asString»' '''
+		error(msg, null, INCOMPATIBLE_OPERANDS)
+	}
+
 	// ---------- Expressions ----------
 	
 	def private dispatch Type expectedType(Expression container, EStructuralFeature feature){

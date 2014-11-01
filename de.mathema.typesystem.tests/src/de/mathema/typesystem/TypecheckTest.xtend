@@ -4,9 +4,9 @@ import com.google.inject.Inject
 import org.eclipse.xtext.diagnostics.Severity
 import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.XtextRunner
-import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
+import static org.junit.Assert.*
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(TypesystemInjectorProvider))
@@ -22,7 +22,7 @@ class TypecheckTest {
 		val model = parseAndResolveOrFail(s)
 		val issues = model.validate
 		
-		Assert.assertTrue(issues.exists[severity == Severity.ERROR])
+		assertTrue(issues.exists[severity == Severity.ERROR])
 	}
 	
 	@Test def void testEntityAssignment(){
@@ -101,7 +101,13 @@ class TypecheckTest {
 		checkOk('''«preamble» f = i * f''')
 		checkOk('''«preamble» f = f * i''')
 		checkOk('''«preamble» f = f * f''')
+	}
+	
+	@Test def void testOverideOperator(){
+		val model = parseAndResolveOrFail('''eval 42 * "foo"''')
+		val issues = model.validate
 		
+		assertEquals(1, issues.size)	// only one error message!
 	}
 	
 }
