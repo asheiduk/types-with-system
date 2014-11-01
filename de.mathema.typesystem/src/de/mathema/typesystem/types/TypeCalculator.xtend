@@ -15,7 +15,7 @@ import de.mathema.typesystem.typesystem.PlusExpression
 import de.mathema.typesystem.typesystem.StringLiteral
 import de.mathema.typesystem.typesystem.TimeLiteral
 import de.mathema.typesystem.typesystem.TimestampLiteral
-import de.mathema.typesystem.typesystem.VariableDefinitionRef
+import de.mathema.typesystem.typesystem.VariableRef
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -120,7 +120,7 @@ class TypeCalculator {
 		right?.type?.toType
 	}
 	
-	def dispatch getType(VariableDefinitionRef it){
-		ref?.type?.toType
+	def dispatch getType(VariableRef it){
+		variable?.type?.toType
 	}
 }

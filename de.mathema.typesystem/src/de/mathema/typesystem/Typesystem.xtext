@@ -88,11 +88,11 @@ PrimaryExpression returns Expression:
 
 
 LValueExpression returns LValueExpression:
-	VariableDefinitionRef ( {LValueRefChain.left = current} '.' right = [Attribute] )*
+	VariableRef ( {LValueRefChain.left = current} '.' right = [Attribute] )*
 ;
 
-VariableDefinitionRef returns LValueExpression:
-	{VariableDefinitionRef} ref = [DeclareStatement]
+VariableRef returns LValueExpression:
+	{VariableRef} variable = [DeclareStatement]
 ;
 
 Literal returns Literal:
