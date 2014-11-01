@@ -6,9 +6,6 @@ import de.mathema.typesystem.typesystem.Entity
 	val String asString
 }
 
-/** special catch-all type */
-@Data class AnyType extends Type {}
-
 @Data class PrimitiveType extends Type {}
 
 @Data class StringType extends PrimitiveType {} 

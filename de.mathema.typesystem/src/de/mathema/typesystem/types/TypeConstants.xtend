@@ -8,6 +8,4 @@ class TypeConstants {
 	public static val DATE_TYPE = new DateType("date")
 	public static val TIME_TYPE = new TimeType("time")
 	public static val TIMESTAMP_TYPE = new TimestampType("timestamp")
-	
-	public static val ANY_TYPE = new AnyType("any")
 }

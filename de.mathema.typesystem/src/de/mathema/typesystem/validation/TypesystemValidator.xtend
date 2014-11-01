@@ -113,6 +113,6 @@ class TypesystemValidator extends AbstractTypesystemValidator {
 	}
 	
 	def private dispatch Type expectedType(EvalStatement container, EStructuralFeature feature){
-		ANY_TYPE
+		null // allow any type
 	}
 }

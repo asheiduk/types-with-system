@@ -10,10 +10,6 @@ class TypeCompatibility {
 		subType == superType 
 	}
 	
-	def private dispatch boolean isSubtypeOf(AnyType subType, Type superType){
-		true
-	}
-	
 	def private dispatch boolean isCoercibleTo(Type fromType, Type toType){
 		false
 	}
