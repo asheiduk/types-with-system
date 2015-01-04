@@ -2,7 +2,7 @@ types-with-system
 =================
 
 
-This is the example code for the article "Typen mit System - verständliche und flexible Typsysteme für DSLs" in the free German magazine ["Kaffeeklatsch"](http://www.bookware.de).(TODO: insert year/month)
+This is the example code for the article "Typen mit System - verständliche und flexible Typsysteme für DSLs" in the free German magazine ["Kaffeeklatsch"](http://www.bookware.de),  [11/2014](http://www.bookware.de/kaffeeklatsch/archiv/KaffeeKlatsch-2014-11.pdf), page 6ff.
 
 It shows how to write a simple type system using the Xtext DSL framework.
 
